@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,9 +17,6 @@ public class Cliente {
 
     @Column(name = "nome", length = 100)
     private String nome;
-
-    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
-    private List<Pedido> pedidos;
 
     public Cliente() {
     }

@@ -8,5 +8,6 @@ import lombok.Setter;
 public class ClienteDto {
 
     private String nome;
+    private String cpf;
 
 }

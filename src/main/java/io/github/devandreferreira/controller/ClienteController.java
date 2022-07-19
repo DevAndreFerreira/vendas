@@ -4,10 +4,13 @@ import io.github.devandreferreira.domain.entity.Cliente;
 import io.github.devandreferreira.dto.ClienteDto;
 import io.github.devandreferreira.repository.ClientesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -48,11 +51,18 @@ public class ClienteController {
         if (clientePorId.isPresent()) {
             Cliente cliente = clientePorId.get();
             cliente.setNome(clienteDto.getNome());
+            cliente.setCpf(clienteDto.getCpf());
             clientesRepository.save(cliente);
             return new ResponseEntity<>(cliente, HttpStatus.OK);
         }
-
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
+    @GetMapping("clientes")
+    public ResponseEntity buscaPorClientes(Cliente filtro) {
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example example = Example.of(filtro, matcher);
+        List<Cliente> lista = clientesRepository.findAll(example);
+        return ResponseEntity.ok(lista);
     }
 }
